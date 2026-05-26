@@ -1802,15 +1802,6 @@ initializr:
         format: project
       default: false
       action: /starter.zip
-    - name: Gradle COLA 架构
-      id: gradle-cola-project
-      description: 基于 Gradle 构建的 COLA（Clean Object-oriented and Layered Architecture）分层架构项目
-      tags:
-        build: gradle
-        format: project
-        architecture: cola
-      default: false
-      action: /starter.zip
     - name: Gradle Config
       id: gradle-build
       description: Generate a Gradle build file.

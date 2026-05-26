@@ -105,8 +105,11 @@ public class InitializerProjectGenerationInvoker
                     subDescription.setBaseDirectory(null);
                     // multiple modules - sub module
                     InitializerProjectGenerator subProjectGenerator = new InitializerProjectGenerator((ctx) -> customizeProjectGenerationContext(ctx, metadata, subModule));
+                    String baseDir = description.getBaseDirectory() != null
+                            ? description.getBaseDirectory()
+                            : description.getArtifactId();
                     subProjectGenerator.generate(subDescription,
-                            generateProject(request, (desc) -> result.getRootDirectory().resolve(description.getBaseDirectory()).resolve(desc.getName() + "-" + subModule.getName())));
+                            generateProject(request, (desc) -> result.getRootDirectory().resolve(baseDir).resolve(desc.getName() + "-" + subModule.getName())));
                 }
             }
 
