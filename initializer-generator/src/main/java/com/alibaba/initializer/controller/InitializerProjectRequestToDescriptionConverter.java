@@ -63,7 +63,19 @@ public class InitializerProjectRequestToDescriptionConverter
         if (metadata instanceof InitializerMetadata) {
             InitializerMetadata aMetadata = (InitializerMetadata) metadata;
 
-            Architecture arch = aMetadata.getArchitecture().get(request.getArchitecture());
+            String architectureId = request.getArchitecture();
+            if (StringUtils.isBlank(architectureId)) {
+                // Derive architecture from the type's "architecture" tag so that
+                // project types such as "maven-cola-project" work correctly when
+                // IntelliJ (or other clients) do not send an explicit architecture
+                // parameter.
+                Type type = metadata.getTypes().get(request.getType());
+                if (type != null && type.getTags().containsKey("architecture")) {
+                    architectureId = type.getTags().get("architecture");
+                }
+            }
+
+            Architecture arch = aMetadata.getArchitecture().get(architectureId);
             description.setArchitecture(arch);
         }
     }

@@ -1768,6 +1768,24 @@ initializr:
         format: project
       default: true
       action: /starter.zip
+    - name: Maven COLA 架构
+      id: maven-cola-project
+      description: 基于 Maven 构建的 COLA（Clean Object-oriented and Layered Architecture）分层架构项目
+      tags:
+        build: maven
+        format: project
+        architecture: cola
+      default: false
+      action: /starter.zip
+    - name: Maven MVC 架构
+      id: maven-mvc-project
+      description: 基于 Maven 构建的 MVC 分层架构项目
+      tags:
+        build: maven
+        format: project
+        architecture: mvc
+      default: false
+      action: /starter.zip
     - name: Maven POM
       id: maven-build
       description: Generate a Maven pom.xml.
@@ -1782,6 +1800,15 @@ initializr:
       tags:
         build: gradle
         format: project
+      default: false
+      action: /starter.zip
+    - name: Gradle COLA 架构
+      id: gradle-cola-project
+      description: 基于 Gradle 构建的 COLA（Clean Object-oriented and Layered Architecture）分层架构项目
+      tags:
+        build: gradle
+        format: project
+        architecture: cola
       default: false
       action: /starter.zip
     - name: Gradle Config
@@ -1802,10 +1829,10 @@ initializr:
   javaVersions:
     - id: 19
     - id: 17
+      default: true
     - id: 11
     - id: 1.8
       name: 8
-      default: true
   languages:
     - name: Java
       id: java
