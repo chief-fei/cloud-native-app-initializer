@@ -95,19 +95,22 @@ public class InitializerProjectGenerationInvoker
                 InitializerProjectGenerator projectGenerator = new InitializerProjectGenerator((ctx) -> customizeProjectGenerationContext(ctx, metadata, new Module(true, true)));
                 result = projectGenerator.generate(description, generateProject(request, null));
             } else {
+                // ensure baseDirectory is always set so root and sub-modules share the same top-level folder
+                if (description.getBaseDirectory() == null) {
+                    description.setBaseDirectory(description.getArtifactId());
+                }
+
                 // multiple modules - root module
                 InitializerProjectGenerator projectGenerator = new InitializerProjectGenerator((ctx) -> customizeProjectGenerationContext(ctx, metadata, new Module(true, false)));
                 result = projectGenerator.generate(description, generateProject(request, null));
 
+                String baseDir = description.getBaseDirectory();
                 for (Module subModule : arch.getSubModules()) {
                     // hack base dir for sub module
                     MutableProjectDescription subDescription = description.createCopy();
                     subDescription.setBaseDirectory(null);
                     // multiple modules - sub module
                     InitializerProjectGenerator subProjectGenerator = new InitializerProjectGenerator((ctx) -> customizeProjectGenerationContext(ctx, metadata, subModule));
-                    String baseDir = description.getBaseDirectory() != null
-                            ? description.getBaseDirectory()
-                            : description.getArtifactId();
                     subProjectGenerator.generate(subDescription,
                             generateProject(request, (desc) -> result.getRootDirectory().resolve(baseDir).resolve(desc.getName() + "-" + subModule.getName())));
                 }
