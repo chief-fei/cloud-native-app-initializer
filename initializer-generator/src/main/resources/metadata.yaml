@@ -1821,9 +1821,9 @@ initializr:
       id: 3.0.2
     - name: 2.7.6
       id: 2.7.6
+      default: true
     - name: 2.6.13
       id: 2.6.13
-      default: true
     - name: 2.4.2
       id: 2.4.2
     - name: 2.3.12.RELEASE
