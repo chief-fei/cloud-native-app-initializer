@@ -99,12 +99,11 @@ public class InitializerProjectGenerationInvoker
                 if (description.getBaseDirectory() == null) {
                     description.setBaseDirectory(description.getArtifactId());
                 }
+                String baseDir = description.getBaseDirectory();
 
                 // multiple modules - root module
                 InitializerProjectGenerator projectGenerator = new InitializerProjectGenerator((ctx) -> customizeProjectGenerationContext(ctx, metadata, new Module(true, false)));
                 result = projectGenerator.generate(description, generateProject(request, null));
-
-                String baseDir = description.getBaseDirectory();
                 for (Module subModule : arch.getSubModules()) {
                     // hack base dir for sub module
                     MutableProjectDescription subDescription = description.createCopy();
