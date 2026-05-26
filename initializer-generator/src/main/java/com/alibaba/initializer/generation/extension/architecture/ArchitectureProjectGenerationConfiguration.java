@@ -20,6 +20,7 @@ import com.alibaba.initializer.generation.InitializerProjectGenerationConfigurat
 import com.alibaba.initializer.generation.condition.ConditionalOnArchitectured;
 import com.alibaba.initializer.generation.condition.ConditionalOnModule;
 import com.alibaba.initializer.generation.condition.ConditionalOnRequestedArchitecture;
+import com.alibaba.initializer.generation.extension.architecture.cola.ColaHelpCustomizer;
 import com.alibaba.initializer.generation.extension.architecture.layered.LayeredHelpCustomizer;
 import com.alibaba.initializer.generation.extension.architecture.mvc.MvcHelpCustomizer;
 import io.spring.initializr.generator.buildsystem.maven.MavenBuildSystem;
@@ -65,6 +66,12 @@ public class ArchitectureProjectGenerationConfiguration {
     @ConditionalOnArchitectured
     public ArchitectureBuildCustomizer architectureBuildCustomizer() {
         return new ArchitectureBuildCustomizer();
+    }
+
+    @Bean
+    @ConditionalOnRequestedArchitecture("cola")
+    public ColaHelpCustomizer colaHelpCustomizer() {
+        return new ColaHelpCustomizer();
     }
 
     @Bean

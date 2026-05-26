@@ -1842,3 +1842,20 @@ initializr:
           description: web 模块，对应 MVC 的 V 概念，存放视图层的逻辑
         - name: service
           description: service 模块，对应 MVC 的 M 概念，存放核心业务逻辑代码
+    - id: cola
+      name: COLA架构
+      description: 基于阿里巴巴 COLA（Clean Object-oriented and Layered Architecture）分层架构
+      subModules:
+        - name: start
+          description: 入口模块，负责 Spring Boot 启动以及基础配置
+          main: true
+        - name: adapter
+          description: Adapter 层，负责对前端（Web/RPC）请求的适配
+        - name: app
+          description: Application 层，负责应用业务流程编排，不包含业务逻辑
+        - name: client
+          description: Client 层，对外暴露的 API 接口及 DTO 定义
+        - name: domain
+          description: Domain 层，核心业务逻辑，包括领域模型、领域服务
+        - name: infrastructure
+          description: Infrastructure 层，基础设施层，提供通用技术能力，负责持久化、外部服务调用等
