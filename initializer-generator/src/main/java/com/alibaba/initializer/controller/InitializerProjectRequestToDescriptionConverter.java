@@ -65,8 +65,11 @@ public class InitializerProjectRequestToDescriptionConverter
 
             // The type's "architecture" tag takes priority, because project types such as
             // "maven-cola-project" encode the architecture directly. This is necessary since
-            // WebProjectRequest.initialize() pre-populates the architecture field with the
-            // metadata default ("none") before the type tag can be consulted.
+            // IDEA's plugin pre-populates the architecture field from the request param before
+            // the type tag can be consulted.
+            // Note: "none" is not a registered architecture ID in metadata.yaml. If the resolved
+            // architectureId is null, empty, or "none", aMetadata.getArchitecture().get() returns
+            // null, which is the expected value meaning "no special architecture" (single-module).
             String architectureId = request.getArchitecture();
             Type type = metadata.getTypes().get(request.getType());
             if (type != null && type.getTags().containsKey("architecture")) {
