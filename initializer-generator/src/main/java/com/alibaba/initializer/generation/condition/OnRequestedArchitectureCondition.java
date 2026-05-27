@@ -38,7 +38,8 @@ public class OnRequestedArchitectureCondition extends ProjectGenerationCondition
 
 		if (description instanceof InitializerProjectDescription) {
 			InitializerProjectDescription aDescription = (InitializerProjectDescription) description;
-			return StringUtils.equals(aDescription.getArchitecture().getId(), id);
+			return aDescription.getArchitecture() != null
+					&& StringUtils.equals(aDescription.getArchitecture().getId(), id);
 		}
 		return false;
 	}
