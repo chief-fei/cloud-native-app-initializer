@@ -1,0 +1,25 @@
+---
+#************H2  Begin****************
+spring:
+  datasource:
+    #创建表的MySql语句位置
+    schema: classpath:schema.sql
+    #插入数据的MySql语句的位置
+    data: classpath:data.sql
+    #指定数据库的种类，这里 file意思是文件型数据库
+    url: jdbc:h2:file:~/test
+    #用户名密码不需要改，都是临时值
+    username: san
+    password:
+    #指定Driver，有了Driver才能访问数据库
+    driver-class-name: org.h2.Driver
+  h2:
+    console:
+      #remote visit
+      settings:
+        web-allow-others: true
+        #default true。咱也可以用命令行访问好数据库
+        trace: true
+      #console url。Spring启动后，可以访问 http://127.0.0.1:8080/h2-console 查看数据库
+      path: /h2-console
+      enabled: true

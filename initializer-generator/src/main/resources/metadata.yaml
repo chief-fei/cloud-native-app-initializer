@@ -1768,6 +1768,24 @@ initializr:
         format: project
       default: true
       action: /starter.zip
+    - name: COLA
+      id: maven-cola-project
+      description: 基于 Maven 构建的 COLA（Clean Object-oriented and Layered Architecture）分层架构项目
+      tags:
+        build: maven
+        format: project
+        architecture: cola
+      default: false
+      action: /starter.zip
+    - name: Maven MVC 架构
+      id: maven-mvc-project
+      description: 基于 Maven 构建的 MVC 分层架构项目
+      tags:
+        build: maven
+        format: project
+        architecture: mvc
+      default: false
+      action: /starter.zip
     - name: Maven POM
       id: maven-build
       description: Generate a Maven pom.xml.
@@ -1776,22 +1794,22 @@ initializr:
         format: build
       default: false
       action: /pom.xml
-    - name: Gradle Project
-      id: gradle-project
-      description: Generate a Gradle based project archive.
-      tags:
-        build: gradle
-        format: project
-      default: false
-      action: /starter.zip
-    - name: Gradle Config
-      id: gradle-build
-      description: Generate a Gradle build file.
-      tags:
-        build: gradle
-        format: build
-      default: false
-      action: /build.gradle
+#     - name: Gradle Project
+#       id: gradle-project
+#       description: Generate a Gradle based project archive.
+#       tags:
+#         build: gradle
+#         format: project
+#       default: false
+#       action: /starter.zip
+#     - name: Gradle Config
+#       id: gradle-build
+#       description: Generate a Gradle build file.
+#       tags:
+#         build: gradle
+#         format: build
+#       default: false
+#       action: /build.gradle
   packagings:
     - name: Jar
       id: jar
@@ -1804,26 +1822,26 @@ initializr:
     - id: 17
     - id: 11
     - id: 1.8
-      name: 8
       default: true
+      name: 8
   languages:
     - name: Java
       id: java
       default: true
-    - name: Kotlin
-      id: kotlin
-      default: false
-    - name: Groovy
-      id: groovy
-      default: false
+#     - name: Kotlin
+#       id: kotlin
+#       default: false
+#     - name: Groovy
+#       id: groovy
+#       default: false
   bootVersions:
     - name: 3.0.2
       id: 3.0.2
     - name: 2.7.6
       id: 2.7.6
+      default: true
     - name: 2.6.13
       id: 2.6.13
-      default: true
     - name: 2.4.2
       id: 2.4.2
     - name: 2.3.12.RELEASE
@@ -1842,3 +1860,20 @@ initializr:
           description: web 模块，对应 MVC 的 V 概念，存放视图层的逻辑
         - name: service
           description: service 模块，对应 MVC 的 M 概念，存放核心业务逻辑代码
+    - id: cola
+      name: COLA架构
+      description: 基于阿里巴巴 COLA（Clean Object-oriented and Layered Architecture）分层架构
+      subModules:
+        - name: start
+          description: 入口模块，负责 Spring Boot 启动以及基础配置
+          main: true
+        - name: adapter
+          description: Adapter 层，负责对前端（Web/RPC）请求的适配
+        - name: app
+          description: Application 层，负责应用业务流程编排，不包含业务逻辑
+        - name: client
+          description: Client 层，对外暴露的 API 接口及 DTO 定义
+        - name: domain
+          description: Domain 层，核心业务逻辑，包括领域模型、领域服务
+        - name: infrastructure
+          description: Infrastructure 层，基础设施层，提供通用技术能力，负责持久化、外部服务调用等

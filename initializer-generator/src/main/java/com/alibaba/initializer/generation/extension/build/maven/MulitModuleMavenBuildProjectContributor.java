@@ -88,17 +88,20 @@ public class MulitModuleMavenBuildProjectContributor extends MavenBuildProjectCo
 
         if (module.isRoot()) {
 
-            // add spring boot plugin
-            this.build.plugins().remove("org.springframework.boot", "spring-boot-maven-plugin");
-            this.build.plugins().add("org.springframework.boot", "spring-boot-maven-plugin", builder -> {
-                builder.version("${spring-boot.version}");//这个要用spring version么？
-                builder.execution("repackage", execution -> execution.goal("repackage"));
-                builder.configuration(conf -> conf.add("mainClass", description.getPackageName() + "." + description.getApplicationName()).add("skip", "true"));
-            });
-
             if (arch == null || CollectionUtils.isEmpty(arch.getSubModules())) {
+                // Single-module: configure spring-boot-maven-plugin with mainClass but without skip
+                this.build.plugins().remove("org.springframework.boot", "spring-boot-maven-plugin");
+                this.build.plugins().add("org.springframework.boot", "spring-boot-maven-plugin", builder -> {
+                    builder.version("${spring-boot.version}");
+                    builder.execution("repackage", execution -> execution.goal("repackage"));
+                    builder.configuration(conf -> conf.add("mainClass", description.getPackageName() + "." + description.getApplicationName()));
+                });
                 super.contribute(projectRoot);
             } else {
+                // Multi-module root: remove spring-boot-maven-plugin from root pom so that skip=true
+                // is not inherited by child modules; the main submodule declares it separately.
+                this.build.plugins().remove("org.springframework.boot", "spring-boot-maven-plugin");
+
                 List<Module> modules = arch.getSubModules();
 
                 // add submodule in root dependencymanager
@@ -167,7 +170,16 @@ public class MulitModuleMavenBuildProjectContributor extends MavenBuildProjectCo
                 } else {
                     addModuleDependencies(dependModules);
                 }
+                // Main submodule owns the spring-boot-maven-plugin to produce the executable JAR
+                this.build.plugins().remove("org.springframework.boot", "spring-boot-maven-plugin");
+                this.build.plugins().add("org.springframework.boot", "spring-boot-maven-plugin", builder -> {
+                    builder.version("${spring-boot.version}");
+                    builder.execution("repackage", execution -> execution.goal("repackage"));
+                    builder.configuration(conf -> conf.add("mainClass", description.getPackageName() + "." + description.getApplicationName()));
+                });
             } else {
+                // Non-main library modules do not need the spring-boot-maven-plugin
+                this.build.plugins().remove("org.springframework.boot", "spring-boot-maven-plugin");
                 addModuleDependencies(dependModules);
             }
 

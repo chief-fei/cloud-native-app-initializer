@@ -63,7 +63,20 @@ public class InitializerProjectRequestToDescriptionConverter
         if (metadata instanceof InitializerMetadata) {
             InitializerMetadata aMetadata = (InitializerMetadata) metadata;
 
-            Architecture arch = aMetadata.getArchitecture().get(request.getArchitecture());
+            // The type's "architecture" tag takes priority, because project types such as
+            // "maven-cola-project" encode the architecture directly. This is necessary since
+            // IDEA's plugin pre-populates the architecture field from the request param before
+            // the type tag can be consulted.
+            // Note: "none" is not a registered architecture ID in metadata.yaml. If the resolved
+            // architectureId is null, empty, or "none", aMetadata.getArchitecture().get() returns
+            // null, which is the expected value meaning "no special architecture" (single-module).
+            String architectureId = request.getArchitecture();
+            Type type = metadata.getTypes().get(request.getType());
+            if (type != null && type.getTags().containsKey("architecture")) {
+                architectureId = type.getTags().get("architecture");
+            }
+
+            Architecture arch = aMetadata.getArchitecture().get(architectureId);
             description.setArchitecture(arch);
         }
     }

@@ -1,0 +1,81 @@
+---
+## 控制台: https://ons.console.aliyun.com
+## Spring Cloud Alibaba RocketMQ 文档：https://github.com/alibaba/spring-cloud-alibaba/blob/master/spring-cloud-alibaba-docs/src/main/asciidoc-zh/rocketmq.adoc
+## RocketMQ 帮助文档：https://help.aliyun.com/product/29530.html
+
+spring:
+  cloud:
+    stream:
+      rocketmq:
+        binder:
+          ########## RocketMQ 通用配置
+          # 客户端接入点，必填
+          name-server: 127.0.0.1:9876
+          # 阿里云账号 AccessKey，默认为空；如果使用aliyun提供的rocketmq服务，该值必填
+          access-key:
+          # 阿里云账号 SecretKey，默认为空；如果使用aliyun提供的rocketmq服务，该值必填
+          secret-key:
+        bindings:
+          input1:
+            consumer:
+              # Consumer 是否同步消费消息模式。默认为false
+              orderly: true
+              # Consumer 基于 TAGS 订阅，多个 tag 以 || 分割
+              tags: tagStr
+              delayLevelWhenNextConsume: 0
+              suspendCurrentQueueTimeMillis: 1000
+          input2:
+            consumer:
+              orderly: false
+              tags: tagStr
+          input3:
+            consumer:
+              tags: tagObj
+          output1:
+            producer:
+              group: my_group
+              transactional: false
+              sync: true
+          output2:
+            producer:
+              group: myTxProducerGroup
+              transactional: true
+              sync: false
+      bindings:
+        input1:
+          destination: test-topic
+          content-type: text/plain
+          group: test-group1
+        input2:
+          destination: test-topic
+          content-type: text/plain
+          group: test-group2
+          consumer:
+            concurrency: 20
+            maxAttempts: 1
+        input3:
+          destination: test-topic
+          content-type: application/json
+          group: test-group3
+          consumer:
+            concurrency: 20
+        input4:
+          destination: TransactionTopic
+          content-type: text/plain
+          group: transaction-group
+          consumer:
+            concurrency: 5
+        input5:
+          destination: pull-topic
+          content-type: text/plain
+          group: pull-topic-group
+        output1:
+          destination: test-topic
+          content-type: text/plain
+        output2:
+          destination: test-topic
+          content-type: application/json
+
+logging:
+  level:
+    com.alibaba.cloud.stream.binder.rocketmq: INFO
